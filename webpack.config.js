@@ -1,7 +1,10 @@
+const env = require('node-env-file');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
 const webpack = require('webpack'); //to access built-in plugins
 const path = require('path');
 const fs = require('fs');
+
+env(path.resolve(__dirname, '.env'));
 
 function getFiles (dir, files_){
   files_ = files_ || [];
@@ -28,7 +31,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: './dist',
-    publicPath: 'http://localhost:3000/',
+    publicPath: `http://localhost:${process.env.SERVER_PORT}/`,
   },
   module: {
     loaders: [

@@ -25,8 +25,8 @@ export default class MinesGame {
       const randX = parseInt(Math.random() * width);
       const randY = parseInt(Math.random() * height);
 
-      if (map[randY][randX].type === MinesGameField.types.EMPTY) {
-        map[randY][randX].type = MinesGameField.types.MINE;
+      if (map[randY][randX].isEmpty()) {
+        map[randY][randX].mine = true;
 
         for (let y = randY - 1; y !== randY + 2; y++) {
           for (let x = randX - 1; x !== randX + 2; x++) {
@@ -44,37 +44,56 @@ export default class MinesGame {
     this.height = targetHeight;
     this.mines = mines;
     this.fields = targetHeight * targetWidth;
+    this.allFieldsIsHidden = true;
     this.map = map;
   }
+  
+  toggleFlag({row, col}) {
+    const field = this.map[row][col];
+    field.flag = !field.flag;
+  }
+  
   
   toggleField({row, col}) {
     const map = this.map;
     const field = map[row][col];
 
-    if (field.type === MinesGameField.types.MINE) {
+    if (field.isMine()) {
+      if (this.allFieldsIsHidden) {
+
+        // reinit map if first click is on mine to prevent from die on first click
+        // its stupid, because if youre unlucky, you can wait and wait
+        //@todo: change this to random map after first click
+        this.initMap({
+          width: this.width,
+          height: this.height,
+          mines: this.mines,
+        });
+
+        this.toggleField({ row, col });
+
+        return;
+      }
+
       throw new Error('You died');
     }
 
     field.visible = true;
+    this.allFieldsIsHidden = false;
     this.fields--;
 
-    let y = Math.max(0, row - 1);
+    const startY = Math.max(0, row - 1);
     const endY = Math.min(this.height - 1, row + 1);
 
-    let x = Math.max(0, col - 1);
+    const startX = Math.max(0, col - 1);
     const endX = Math.min(this.width - 1, col + 1);
 
-    // debugger;
     if (!field.value) {
-      for (; y <= endY; y++) {
-        if (!map[y][col].visible && map[y][col].type === MinesGameField.types.EMPTY) {
-          this.toggleField({row: y, col});
-        }
-      }
-
-      for (; x <= endX; x++) {
-        if (!map[row][x].visible && map[row][x].type === MinesGameField.types.EMPTY) {
-          this.toggleField({row, col: x});
+      for (let y = startY; y <= endY; y++) {
+        for (let x = startX; x <= endX; x++) {
+          if (!map[y][x].isValueVisible() && map[y][x].isEmpty()) {
+            this.toggleField({ row: y, col: x });
+          }
         }
       }
     }

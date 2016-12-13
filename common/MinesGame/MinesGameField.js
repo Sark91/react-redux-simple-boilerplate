@@ -1,12 +1,24 @@
 export default class MinesGameField {
-  static types = {
-    MINE: 'MINE',
-    EMPTY: 'EMPTY',
-  };
-
-  constructor(type = MinesGameField.types.EMPTY, value = 0) {
-    this.type = type;
-    this.value = value;
+  constructor() {
+    this.value = 0;
     this.visible = false;
+    this.flag = false;
+    this.mine = false;
+  }
+
+  isValueVisible() {
+    return this.visible;
+  }
+
+  isMine() {
+    return this.mine;
+  }
+
+  isFlag() {
+    return this.flag;
+  }
+
+  isEmpty() {
+    return !this.isMine() && !this.isFlag();
   }
 };

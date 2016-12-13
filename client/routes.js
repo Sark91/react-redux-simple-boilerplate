@@ -39,13 +39,13 @@ const returnRouteComponents = (path, props, component, children) => {
 
   if (Object.keys(children).length) {
     return (
-      <Route {...props} component={component} path={path}>
+      <Route {...props} component={component} path={path} key={path}>
         {_.map(children, (child, _path) => returnRouteComponents(_path, child.props, child.component, child.children))}
       </Route>
     );
   } else {
     return (
-      <Route {...props} path={path}>
+      <Route {...props} path={path} key={path}>
         <IndexRoute component={component} />
       </Route>
     );
