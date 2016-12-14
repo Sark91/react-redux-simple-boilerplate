@@ -43,7 +43,8 @@ export default class MinesGame {
     this.width = targetWidth;
     this.height = targetHeight;
     this.mines = mines;
-    this.fields = targetHeight * targetWidth;
+    this.fieldsLeft = targetHeight * targetWidth;
+    this.flags = 0;
     this.allFieldsIsHidden = true;
     this.map = map;
   }
@@ -51,8 +52,13 @@ export default class MinesGame {
   toggleFlag({row, col}) {
     const field = this.map[row][col];
     field.flag = !field.flag;
+
+    if (field.flag) {
+      this.flags++;
+    } else {
+      this.flags--;
+    }
   }
-  
   
   toggleField({row, col}) {
     const map = this.map;
@@ -80,7 +86,11 @@ export default class MinesGame {
 
     field.visible = true;
     this.allFieldsIsHidden = false;
-    this.fields--;
+    this.fieldsLeft--;
+
+    if (this.fieldsLeft === this.mines) {
+      throw new Error('You won');
+    }
 
     const startY = Math.max(0, row - 1);
     const endY = Math.min(this.height - 1, row + 1);
