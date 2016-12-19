@@ -9,7 +9,8 @@ export default class MinesGame {
     const map = [];
     const targetWidth = parseInt(width);
     const targetHeight = parseInt(height);
-    let minesToEnd = Math.min(width * height, Math.max(parseInt(mines), 1));
+    const targetMines = parseInt(mines);
+    let minesToEnd = Math.min(width * height, Math.max(targetMines, 1));
 
     for (let y = 0; y < targetHeight; y++) {
       const row = [];
@@ -42,7 +43,7 @@ export default class MinesGame {
 
     this.width = targetWidth;
     this.height = targetHeight;
-    this.mines = mines;
+    this.mines = targetMines;
     this.fieldsLeft = targetHeight * targetWidth;
     this.flags = 0;
     this.allFieldsIsHidden = true;
@@ -67,9 +68,6 @@ export default class MinesGame {
     if (field.isMine()) {
       if (this.allFieldsIsHidden) {
 
-        // reinit map if first click is on mine to prevent from die on first click
-        // its stupid, because if youre unlucky, you can wait and wait
-        //@todo: change this to random map after first click
         this.initMap({
           width: this.width,
           height: this.height,
@@ -88,10 +86,6 @@ export default class MinesGame {
     this.allFieldsIsHidden = false;
     this.fieldsLeft--;
 
-    if (this.fieldsLeft === this.mines) {
-      throw new Error('You won');
-    }
-
     const startY = Math.max(0, row - 1);
     const endY = Math.min(this.height - 1, row + 1);
 
@@ -106,6 +100,10 @@ export default class MinesGame {
           }
         }
       }
+    }
+
+    if (this.fieldsLeft === this.mines) {
+      throw new Error('You won');
     }
   }
 }

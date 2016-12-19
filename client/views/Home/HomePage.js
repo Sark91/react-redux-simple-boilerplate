@@ -3,10 +3,8 @@ import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 import { registerRoute } from 'client/routes';
 import { newGame, procCell, flagCell } from 'client/reducers/actions/game';
-import MinesGameField from 'common/MinesGame/MinesGameField';
 
 import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
 
 @registerRoute('/')
 @connect(
