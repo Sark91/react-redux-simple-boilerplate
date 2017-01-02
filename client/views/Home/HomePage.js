@@ -5,6 +5,7 @@ import { registerRoute } from 'client/routes';
 import { newGame, procCell, flagCell } from 'client/reducers/actions/game';
 
 import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 
 @registerRoute('/')
 @connect(
@@ -61,22 +62,9 @@ class HomePage extends React.Component {
   renderMap (gameMap) {
     return gameMap.map((row, rowIndex) => (
       <div key={`game-map--row-${rowIndex}`}>
-        {row.map((cell, colIndex) => (
-          <button
-            style={{
-              height: 36,
-              width: 36,
-              background: '#888',
-              border: '1px dotted white',
-              color: (cell.isValueVisible() && cell.value > 0) ? this.getColor(cell.value) : 'white',
-              fontWeight: (cell.isValueVisible() && cell.value > 0) ? 900 : 100,
-              fontSize: '12px',
-            }}
-            key={`game-map--row-${rowIndex}--col-${colIndex}`}
-            onClick={this.handleClickCell.bind(this, rowIndex, colIndex)}
-            onContextMenu={this.handleRightClickCell.bind(this, rowIndex, colIndex)}
-          >{this.getText(cell)}</button>
-        ))}
+        {/*row.map((cell, colIndex) => (
+          
+        ))*/}
       </div>
     ));
   }
