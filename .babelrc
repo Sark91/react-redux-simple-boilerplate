@@ -1,9 +1,10 @@
 {
-  "presets": ["stage-0"],
+  "presets": ["es2015", "stage-0"],
   "plugins": [
     "transform-async-to-generator",
     "transform-react-jsx",
     "transform-es2015-modules-commonjs",
-    "transform-decorators-legacy"
+    "transform-decorators-legacy",
+    "transform-class-properties"
   ]
 }

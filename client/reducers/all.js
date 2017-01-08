@@ -1,15 +1,12 @@
-import { reducer as reduxAsyncConnect } from 'redux-async-connect';
 import { createStore, combineReducers } from 'redux';
-import game from 'client/reducers/game';
 
 export default createStore(
   combineReducers({
-    reduxAsyncConnect,
-    game,
     debugReducer: (state = {}, action = null) => {
+      // eslint-disable-next-line no-console
       console.log(action.type, action, state);
       return state;
     },
   }),
-  window.__data
+  window.__data,
 );

@@ -14,9 +14,9 @@ app.get('/*', (req, res) => {
   });
 });
 
-const server = app.listen(process.env.SERVER_PORT, function () {
-  const host = server.address().address;
-  const port = server.address().port;
+const server = app.listen(process.env.SERVER_PORT, () => {
+  const { address, port } = server.address();
 
-  console.log('Example app listening at http://%s:%s', host, port);
+  // eslint-disable-next-line no-console
+  console.log(`App listening at http://${address}:${port}`);
 });

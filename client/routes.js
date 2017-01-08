@@ -5,52 +5,55 @@ import {
 } from 'react-router';
 import _ from 'lodash';
 
-// import HomePage from 'client/views/Home/HomePage';
-
 const routes = {
   children: {},
 };
 
-export const registerRoute = (path, props) => (component) => {
-  const _path = path
-    .replace(/^\/+/, '')
-    .replace(/\//g, '.');
+export const registerRoute = (path, props = {}) => (component) => {
+  const _path = path === '/'
+      ? './'
+      : (`/${path}`)
+          .replace(/^\/+/, '/')
+          .replace(/\//g, '.');
 
   const _pathWithChildren = _path
     .split('.')
-    .join('.children.');
+    .join('.children.')
+    .replace(/^\.+/, '')
+    .replace(/\.+$/, '');
 
-  if (_path) {
-    _.set(routes, 'children.' + _pathWithChildren, {
+  if (path) {
+    _.set(routes, _pathWithChildren, {
       props,
       component,
-      children: _.get(routes, 'children.' + _pathWithChildren + '.children') || {},
+      children: _.get(routes, `${_pathWithChildren}.children`) || {},
     });
   } else {
     routes.props = props;
     routes.component = component;
   }
 
-  console.log(routes);
+  return component;
 };
 
-const returnRouteComponents = (path, props, component, children) => {
-  console.log(Object.keys(children).length ? 'Route' : 'IndexRoute', {path, props, children} );
-
+const returnRouteComponents = (path, props = {}, component = null, children = {}) => {
   if (Object.keys(children).length) {
     return (
-      <Route {...props} component={component} path={path} key={path}>
-        {_.map(children, (child, _path) => returnRouteComponents(_path, child.props, child.component, child.children))}
-      </Route>
-    );
-  } else {
-    return (
-      <Route {...props} path={path} key={path}>
-        <IndexRoute component={component} />
+      // eslint-disable-next-line react/prop-types
+      <Route component={component} path={path} key={props.path || path} {...props}>
+        {_.map(children, (child, _path) =>
+          returnRouteComponents(_path, child.props, child.component, child.children),
+        )}
       </Route>
     );
   }
 
+  return (
+    // eslint-disable-next-line react/prop-types
+    <Route path={path} key={props.path || path} {...props}>
+      <IndexRoute component={component} />
+    </Route>
+  );
 };
 
-export default (store) => returnRouteComponents('/', routes.props, routes.component, routes.children);
+export default () => returnRouteComponents('', routes.props, routes.component, routes.children);

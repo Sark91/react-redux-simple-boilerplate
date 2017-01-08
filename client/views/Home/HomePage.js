@@ -1,87 +1,19 @@
 import React from 'react';
-import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 import { registerRoute } from 'client/routes';
-import { newGame, procCell, flagCell } from 'client/reducers/actions/game';
-
-import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
 
 @registerRoute('/')
 @connect(
-  state => ({
-    gameMap: state.game.map
-  }),
-  dispatch => ({
-    newGame: (...args) => dispatch(newGame(...args)),
-    procCell: (...args) => dispatch(procCell(...args)),
-    flagCell: (...args) => dispatch(flagCell(...args)),
-  })
+  null,
+  null,
 )
 class HomePage extends React.Component {
-
-  handleClickStart = () => {
-    this.props.newGame(
-      this.widthRef.getValue(),
-      this.heightRef.getValue(),
-      this.minesRef.getValue(),
-    );
-  };
-
-  handleClickCell = (row, col) => {
-    console.log('HomePage.handleClickCell', {row, col});
-    this.props.procCell(row, col);
-  };
-
-  handleRightClickCell = (row, col, e) => {
-    console.log('HomePage.handleRightClickCell', {row, col});
-    e.preventDefault();
-    this.props.flagCell(row, col);
-  };
-
-  getColor(value) {
-    switch (parseInt(value)) {
-      case 1: return 'blue';
-      case 2: return 'green';
-      case 3: return 'yellow';
-      default: return 'red';
-    }
-  }
-
-  getText(cell) {
-    if (cell.isValueVisible()) {
-      return cell.value || '\u00A0';
-    }
-    else if (cell.isFlag()) {
-      return <span style={{color: 'pink'}}>{'\u2691'}</span>;
-    }
-
-    return '?'
-  }
-
-  renderMap (gameMap) {
-    return gameMap.map((row, rowIndex) => (
-      <div key={`game-map--row-${rowIndex}`}>
-        {/*row.map((cell, colIndex) => (
-          
-        ))*/}
-      </div>
-    ));
-  }
 
   render() {
     return (
       <div>
-        <div>
-          <TextField hintText="Width" ref={width => this.widthRef = width} defaultValue="10" />
-          <TextField hintText="Height" ref={height => this.heightRef = height} defaultValue="10" />
-          <TextField hintText="Mines" ref={mines => this.minesRef = mines} defaultValue="10" />
-          <FlatButton label="Start" onClick={this.handleClickStart} />
-        </div>
-        <div>
-          {this.renderMap(this.props.gameMap)}
-        </div>
+        HOMEPAGE
       </div>
     );
   }
-};
+}
